@@ -3,6 +3,27 @@
 <HEAD>
 	<title>add.snapswiper</title>
 	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.5, initial-scale=1.0, user-scalable=1">
+	<!--<style>
+		// snapSwiper scss skeleton
+		.swipe-wrapper {
+			.swipe-scroll {
+				.swipe-slide {}
+			}
+			.swipe-arrow {
+				&.swipe-left {}
+				&.swipe-right {}
+			}
+			.swipe-defence {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: rgba(0, 0, 0, 0);
+				display: none;
+			}
+		}
+	</style>-->
 	<style>
 		body{margin:0; background:#242424; color:#999; font:14px tahoma;}
 		div{box-sizing: border-box;}
@@ -16,7 +37,7 @@
 		div.debugerr > span:last-child:before{opacity:1; animation:1s blink step-end infinite;}
 
 		.swipe-wrapper {}
-		.swipe-active {}
+		.swipe-scroll {}
 		.swipe-slide {}
 		.swipe-arrow {}
 		.swipe-left {}
@@ -32,8 +53,9 @@
 		}
 
 		.refinement-categories {
+			position: relative;
 			margin: 50px;
-			background: #0e8;
+			//background: #0e8;
 		}
 		.hero-snap-swiper {
 			position: relative;
@@ -52,67 +74,94 @@
 		}
 
 		@media screen and (max-width: 960px) {
-			.refinement-categories {
-				margin: 50px 0 0;
-				height: 56px;
-				overflow: hidden;
-			}
 			.hero-snap-swiper {
 				overflow-x: scroll;
 				white-space: nowrap;
 				padding-bottom: 12.3px; // just to hide the native scrollbar
 			}
+			.refinement-categories {
+				margin: 50px 0 0;
+				height: 56px;
+				overflow: hidden;
+			}
+            .refinement-categories:before,
+            .refinement-categories:after {
+                content: '';
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                pointer-events: none;
+                background: linear-gradient(to right, rgba(36,36,36,0) 0%, rgb(36,36,36) 100%);
+                width: 60px;
+            }
+            .refinement-categories:before { left: 0; transform: rotate(180deg); z-index:1;}
+            .refinement-categories:after { right: 0; }
+            .refinement-categories.no-right-gradient:after {
+                display: none;
+            }
+            .refinement-categories.no-left-gradient:before {
+                display: none;
+            }
 		}
 	</style>
-	<script src="../add.utils.js" type="text/javascript"></script>
 	<script src="jquery-2.1.1.min.js" type="text/javascript"></script>
-	<script src="add.snapswiper.js" type="text/javascript"></script>	
+	<script src="add.snapswiper.js" type="text/javascript"></script>
 </HEAD>
 <BODY>
 <div class="debugerr"></div>
 <div class="refinement-categories">
 	<div class="hero-snap-swiper">
-		<a class="refinement-link" href="#">1 FIRST TITLE</a>
-		<a class="refinement-link" href="#">2 SHORT</a>
-		<a class="refinement-link" href="#">3 Another</a>
-		<a class="refinement-link" href="#">4 Some Long Long Title Here</a>
-		<a class="refinement-link" href="#">5 Lorem</a>
-		<a class="refinement-link" href="#">6 Ipsum Dolor</a>
-		<a class="refinement-link" href="#">7 Ala bala</a>
-		<a class="refinement-link" href="#">8 Portokala</a>
-		<a class="refinement-link" href="#">9 И отново...</a>
-		<a class="refinement-link" href="#">10 FIRST TITLE</a>
-		<a class="refinement-link" href="#">11 SHORT</a>
-		<a class="refinement-link" href="#">12 Another</a>
-		<a class="refinement-link" href="#">13 Some Long Long Title Here</a>
-		<a class="refinement-link" href="#">14 Lorem</a>
-		<a class="refinement-link" href="#">15 Ipsum Dolor</a>
-		<a class="refinement-link" href="#">16 Ala bala</a>
-		<a class="refinement-link" href="#">17 Portokala</a>
-		<a class="refinement-link" href="#">18 И отново...</a>
-		<a class="refinement-link" href="#">19 FIRST TITLE</a>
-		<a class="refinement-link" href="#">20 SHORT</a>
-		<a class="refinement-link" href="#">21 Another</a>
-		<a class="refinement-link" href="#">22 Some Long Long Title Here</a>
-		<a class="refinement-link" href="#">23 Lorem</a>
-		<a class="refinement-link" href="#">24 Ipsum Dolor</a>
-		<a class="refinement-link" href="#">25 Ala bala</a>
-		<a class="refinement-link" href="#">26 Ended..</a>
+		<a class="refinement-link" href="#1">1 FIRST TITLE</a>
+		<a class="refinement-link" href="#2">2 SHORT</a>
+		<a class="refinement-link" href="#3">3 Another</a>
+		<a class="refinement-link" href="#4">4 Some Long Long Title Here</a>
+		<a class="refinement-link" href="#5">5 Lorem</a>
+		<a class="refinement-link" href="#6">6 Ipsum Dolor</a>
+		<a class="refinement-link" href="#7">7 Ala bala</a>
+		<a class="refinement-link" href="#8">8 Portokala</a>
+		<a class="refinement-link" href="#9">9 И отново...</a>
+		<a class="refinement-link" href="#10">10 FIRST TITLE</a>
+		<a class="refinement-link" href="#11">11 SHORT</a>
+		<a class="refinement-link" href="#12">12 Another</a>
+		<a class="refinement-link" href="#13">13 Some Long Long Title Here</a>
+		<a class="refinement-link" href="#14">14 Lorem</a>
+		<a class="refinement-link" href="#15">15 Ipsum Dolor</a>
+		<a class="refinement-link" href="#16">16 Ala bala</a>
+		<a class="refinement-link" href="#17">17 Portokala</a>
+		<a class="refinement-link" href="#18">18 И отново...</a>
+		<a class="refinement-link" href="#19">19 FIRST TITLE</a>
+		<a class="refinement-link" href="#20">20 SHORT</a>
+		<a class="refinement-link" href="#21">21 Another</a>
+		<a class="refinement-link" href="#22">22 Some Long Long Title Here</a>
+		<a class="refinement-link" href="#23">23 Lorem</a>
+		<a class="refinement-link" href="#24">24 Ipsum Dolor</a>
+		<a class="refinement-link" href="#25">25 Ala bala</a>
+		<a class="refinement-link" href="#26">26 Ended..</a>
 	</div>
 </div>
 
 <script>
-	var swiper = new AddSnapSwiper({
-			swiperSelector: 'div.hero-snap-swiper',
+	var swiper,
+		checkForGradient = function() {
+			var pos = ~~(swiper.$scroll[0].scrollLeft + 1),
+				actRight = pos >= swiper.view.maxscroll ? 'addClass' : 'removeClass',
+				actLeft = pos <= 1 ? 'addClass' : 'removeClass';
+
+			swiper.$wrapper[actRight]('no-right-gradient');
+			swiper.$wrapper[actLeft]('no-left-gradient');
+		};
+
+	swiper = new AddSnapSwiper({
+			scrollSelector: 'div.hero-snap-swiper',
 			slidesSelector: 'a.refinement-link',
 			callbacks: {
-				onRelease: function() {
-					if (swiper.stat.targetPoint >= swiper.view.maxscroll) debug('Gradient','delta bottom: '+swiper.stat.delta )
-				}
+				onRelease: checkForGradient,
+				onResize: checkForGradient
 			}
 		}, {
-		    recursiveOverride: recursiveOverride
+			recursiveOverride: recursiveOverride
 		});
+	checkForGradient();
 	//UTILS.keyboard.focus({keys:{space: function(){console.log('SPACEBAR')}, back: function(){console.log('BACKBUTTON')}}});
 	//UTILS.keyboard.blur();
 	//var a=UTILS.base64.encode('тра-lala');
