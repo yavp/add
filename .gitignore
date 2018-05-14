@@ -1,3 +1,11 @@
+# All dot names
+.*
+!/.gitignore
+
+
+
+
+
 # Logs
 logs
 *.log

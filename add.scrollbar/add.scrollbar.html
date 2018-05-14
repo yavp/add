@@ -1,0 +1,153 @@
+<template id="add-scrollbar">
+	<style>
+		:host {
+			display: inline-block;
+			font-family: Tahoma;
+			contain: content;
+		}
+
+		/* panel & content */
+		:host .panel {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+		}
+
+		:host .panel .scroll {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: -50px;
+			bottom: -50px;
+			overflow: scroll;
+		}
+
+		:host .panel .scroll .content {
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+
+		/* bars & buttons */
+		:host .panel .bar {
+			position: absolute;
+			background: #eee;
+		}
+
+		:host .panel .bar.V {
+			top: 0;
+			right: 0;
+			bottom: 16px;
+			width: 16px;
+		}
+
+		:host .panel .bar.H {
+			left: 0;
+			bottom: 0;
+			right: 16px;
+			height: 16px;
+		}
+
+		:host .panel .bar .slider {
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+
+		:host .panel .bar.V .slider {
+			width: 100%;
+			height: 92px;
+		}
+
+		:host .panel .bar.H .slider {
+			width: 92px;
+			height: 100%;
+		}
+
+		:host .panel .bar .slider:before {
+			content: '';
+			position: absolute;
+			background: #999;
+		}
+
+		:host .panel .bar.V .slider:before {
+			left: 0;
+			right: 0;
+			top: 16px;
+			bottom: 16px;
+		}
+
+		:host .panel .bar.H .slider:before {
+			left: 16px;
+			right: 16px;
+			top: 0;
+			bottom: 0;
+		}
+
+		:host .panel .bar .arrow {
+			position: absolute;
+			height: 16px;
+			width: 16px;
+			background: #bbb;
+		}
+
+		:host .panel .bar.V .arrow.back {
+			left: 0;
+			right: 0;
+			top: 0;
+		}
+
+		:host .panel .bar.V .arrow.forth {
+			left: 0;
+			right: 0;
+			bottom: 0;
+		}
+
+		:host .panel .bar.H .arrow.back {
+			top: 0;
+			bottom: 0;
+			left: 0;
+		}
+
+		:host .panel .bar.H .arrow.forth {
+			top: 0;
+			bottom: 0;
+			right: 0;
+		}
+
+		:host([vertical]) .panel .bar.H {
+			display: none;
+		}
+		:host([vertical]) .panel .bar.V {
+			bottom: 0;
+		}
+
+		:host([horizontal]) .panel .bar.V {
+			display: none;
+		}
+		:host([horizontal]) .panel .bar.H {
+			right: 0;
+		}
+
+	</style>
+	<div class="panel">
+		<div class="scroll">
+			<div class="content">
+				<slot name="content-slot"></slot>
+			</div>
+		</div>
+		<div class="bar V">
+			<div class="slider"></div>
+			<div class="arrow back"></div>
+			<div class="arrow forth"></div>
+		</div>
+		<div class="bar H">
+			<div class="slider"></div>
+			<div class="arrow back"></div>
+			<div class="arrow forth"></div>
+		</div>
+	</div>
+</template>

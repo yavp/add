@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<HTML lang="en">
+<HEAD>
+	<title>add.router</title>
+	<style>
+		body{background:#242424; color:#999; font:14px tahoma;}
+		div{display:inline-block; min-width:150px; padding:6px 8px;}
+		a{display:block; text-decoration:none;}
+		#msg{position:absolute; top:0px; right:0px; background:#464646; max-height:33%; overflow:auto;}
+		#msg p{margin:2px 0; padding:3px 6px;}
+		#msg p:first-child{text-align:center;}
+		#msg p:last-child{background:#242424;}
+	</style>
+	<script src="add.router.js" type="text/javascript"></script>
+	<script>
+		window.onload = function(){
+			/** history **/
+			ROUTER.init({
+				mode: 'history',
+				bindAnchors: true,
+				callback: output
+			});
+			/** hash - default **
+			ROUTER.init({
+				callback: output
+			});
+			/**/
+		};
+		var output = function(path){
+			var msg = document.querySelector('#msg');
+			msg.i = msg.i+1 || 1;
+			msg.innerHTML += '<p>'+ msg.i +': '+ path +'</p>';
+			msg.scrollTop = msg.scrollHeight - msg.clientHeight;
+		};
+	</script>
+</HEAD>
+<BODY>
+<div>
+	<h3>HASH</h3>
+	<a href="#//link-1/къща тест/bbb/ccc">link-1</a>
+	<a href="#/////link-2/aa/bb:11">link-2</a>
+	<a href="#/link-3">link-3</a>
+	<a href="#link-4">link-4</a>
+	<a href="#link-5">link-5</a>
+	<a href="#link-6">link-6</a>
+	<a href="#link-7">link-7</a>
+</div>
+<div>
+	<h3>HISTORY</h3>
+	<a href="//link-1/къща тест/bbb/ccc">link-1</a>
+	<a href="/////link-2/aa/bb:11">link-2</a>
+	<a href="/link-3">link-3</a>
+	<a href="link-4">link-4</a>
+	<a href="link-5">link-5</a>
+	<a href="link-6">link-6</a>
+	<a href="link-7">link-7</a>
+</div>
+<div id="msg">
+	<p>------------ output ------------</p>
+</div>
+</BODY>
+</HTML>

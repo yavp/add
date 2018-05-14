@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<HTML lang="en">
+<HEAD>
+	<title>add.snapswiper</title>
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.5, initial-scale=1.0, user-scalable=1">
+	<style>
+		body{margin:0; background:#242424; color:#999; font:14px tahoma;}
+		div{box-sizing: border-box;}
+		a{display:block; text-decoration:none; box-sizing: border-box;}
+
+		div.debugerr{display:none; position:fixed; bottom:30px; left:0px; width:100%; font-size:12px; padding:10px; margin-top:-10px; background:rgba(125,125,125,.25);}
+		div.debugerr > span{display:block;}
+		@keyframes blink {0% {color:inherit;} 50% {color:transparent;}}
+		div.debugerr > span:before{opacity:.5; content:'> ';}
+		div.debugerr > span:last-child{color:#fff;}
+		div.debugerr > span:last-child:before{opacity:1; animation:1s blink step-end infinite;}
+
+		.swipe-wrapper {}
+		.swipe-active {}
+		.swipe-slide {}
+		.swipe-arrow {}
+		.swipe-left {}
+		.swipe-right {}
+		.swipe-defence {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: rgba(0, 0, 0, 0);
+			display: none;
+		}
+
+		.refinement-categories {
+			margin: 50px;
+			background: #0e8;
+		}
+		.hero-snap-swiper {
+			position: relative;
+			text-align: center;
+		}
+		.refinement-link {
+			display: inline-block;
+			margin: 0 8px 10px 0;
+			padding: 18px 20px;
+			border: 1px solid #fff;
+			background-color: #e80;
+			color: #fff;
+		}
+		.refinement-link:last-child {
+			margin-right: 0;
+		}
+
+		@media screen and (max-width: 960px) {
+			.refinement-categories {
+				margin: 50px 0 0;
+				height: 56px;
+				overflow: hidden;
+			}
+			.hero-snap-swiper {
+				overflow-x: scroll;
+				white-space: nowrap;
+				padding-bottom: 12.3px; // just to hide the native scrollbar
+			}
+		}
+	</style>
+	<script src="../add.utils.js" type="text/javascript"></script>
+	<script src="jquery-2.1.1.min.js" type="text/javascript"></script>
+	<script src="add.snapswiper.js" type="text/javascript"></script>	
+</HEAD>
+<BODY>
+<div class="debugerr"></div>
+<div class="refinement-categories">
+	<div class="hero-snap-swiper">
+		<a class="refinement-link" href="#">1 FIRST TITLE</a>
+		<a class="refinement-link" href="#">2 SHORT</a>
+		<a class="refinement-link" href="#">3 Another</a>
+		<a class="refinement-link" href="#">4 Some Long Long Title Here</a>
+		<a class="refinement-link" href="#">5 Lorem</a>
+		<a class="refinement-link" href="#">6 Ipsum Dolor</a>
+		<a class="refinement-link" href="#">7 Ala bala</a>
+		<a class="refinement-link" href="#">8 Portokala</a>
+		<a class="refinement-link" href="#">9 И отново...</a>
+		<a class="refinement-link" href="#">10 FIRST TITLE</a>
+		<a class="refinement-link" href="#">11 SHORT</a>
+		<a class="refinement-link" href="#">12 Another</a>
+		<a class="refinement-link" href="#">13 Some Long Long Title Here</a>
+		<a class="refinement-link" href="#">14 Lorem</a>
+		<a class="refinement-link" href="#">15 Ipsum Dolor</a>
+		<a class="refinement-link" href="#">16 Ala bala</a>
+		<a class="refinement-link" href="#">17 Portokala</a>
+		<a class="refinement-link" href="#">18 И отново...</a>
+		<a class="refinement-link" href="#">19 FIRST TITLE</a>
+		<a class="refinement-link" href="#">20 SHORT</a>
+		<a class="refinement-link" href="#">21 Another</a>
+		<a class="refinement-link" href="#">22 Some Long Long Title Here</a>
+		<a class="refinement-link" href="#">23 Lorem</a>
+		<a class="refinement-link" href="#">24 Ipsum Dolor</a>
+		<a class="refinement-link" href="#">25 Ala bala</a>
+		<a class="refinement-link" href="#">26 Ended..</a>
+	</div>
+</div>
+
+<script>
+	var swiper = new AddSnapSwiper({
+			swiperSelector: 'div.hero-snap-swiper',
+			slidesSelector: 'a.refinement-link',
+			callbacks: {
+				onRelease: function() {
+					if (swiper.stat.targetPoint >= swiper.view.maxscroll) debug('Gradient','delta bottom: '+swiper.stat.delta )
+				}
+			}
+		}, {
+		    recursiveOverride: recursiveOverride
+		});
+	//UTILS.keyboard.focus({keys:{space: function(){console.log('SPACEBAR')}, back: function(){console.log('BACKBUTTON')}}});
+	//UTILS.keyboard.blur();
+	//var a=UTILS.base64.encode('тра-lala');
+	//console.log(UTILS.base64.decode(a)+': '+a);
+</script>
+</BODY>
+</HTML>
