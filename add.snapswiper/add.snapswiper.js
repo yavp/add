@@ -114,6 +114,9 @@ var AddSnapSwiper = function(prop, depend) {
             console.log('%csnapSwiper: already initiated', 'color:yellow');
         }
     };
+    this.getPosition = function() {
+        return ~~(this.$scroll[0].scrollLeft + 1);
+    };
 
     // Private
 
@@ -127,12 +130,11 @@ var AddSnapSwiper = function(prop, depend) {
             this.wscreen = self.$scroll[0].offsetWidth; // <- current scroll screen width
             this.maxscroll = this.wscroll - this.wscreen; // <- maximum scrollLeft value
             if (this.maxscroll == 0) {
-
                 // turn OFF events
                 this.toggle(false);
                 return false;
             }
-            if (full) {
+            if (full || !$(self.$slides[0]).hasClass('swipe-slide')) {
                 // TODO: extend for lazy loading here.. view needs full reset
                 for (var i = 0; i < self.$slides.length; i++) {
                     $(self.$slides[i]).not('.swipe-slide').addClass('swipe-slide');
@@ -140,6 +142,12 @@ var AddSnapSwiper = function(prop, depend) {
                 }
             }
             this.averageSpacing = ~~(this.wscroll / self.$slides.length + .5);
+
+            // check snap point and force adjustment
+            var scrpos = self.getPosition();
+            if (scrpos < this.maxscroll - 1) {
+                self.$scroll[0].scrollLeft = self.closest(scrpos, this.snapPoints);
+            }
             
             // turn ON events
             this.toggle(true);
@@ -177,7 +185,7 @@ var AddSnapSwiper = function(prop, depend) {
             this.speed = 0; // <- calculated onRelease
             this.direction = 0; // <- calculated onRelease
             this.delta = 0; // <- calculated onRelease
-            this.currscroll = 0; // <- target scroll position - accessible onRelease but reached after animation ends
+            this.snapto = 0; // <- target scroll position - accessible onRelease but reached after animation ends
         }
     };
 
@@ -305,10 +313,8 @@ var AddSnapSwiper = function(prop, depend) {
         }
 
         self.decay.compose();
-
-        typeof self.prop.callbacks.onRelease == 'function' && self.prop.callbacks.onRelease();
-
         self.decay.play();
+        typeof self.prop.callbacks.onRelease == 'function' && self.prop.callbacks.onRelease();
 
         return true;
     };
@@ -325,7 +331,9 @@ var AddSnapSwiper = function(prop, depend) {
     this.decay = {
         frames: [],
         interval: null,
+        playing: false,
         compose: function() {
+            this.stop();
             this.frames = [];
             var targetPoint,
                 sourcePoint = ~~(self.$scroll[0].scrollLeft + .5);
@@ -336,29 +344,30 @@ var AddSnapSwiper = function(prop, depend) {
 
                 // displacement too small
                 case self.stat.delta < self.view.averageSpacing * self.prop.speed.sensitivity:
-                    targetPoint = self.stat.currscroll =
-                        sourcePoint == self.view.maxscroll ? self.view.maxscroll : self.closest(sourcePoint, self.view.snapPoints);
+                    targetPoint = self.stat.snapto = sourcePoint == self.view.maxscroll ?
+                                    self.view.maxscroll :
+                                        self.closest(sourcePoint, self.view.snapPoints);
                     break;
 
                 // bottom right reached
                 case sourcePoint == self.view.maxscroll && self.stat.direction == 1:
-                    self.stat.currscroll = self.view.maxscroll;
+                    self.stat.snapto = self.view.maxscroll;
                     break;
 
                 // bottom left reached
                 case sourcePoint == 0 && self.stat.direction == -1:
-                    self.stat.currscroll = 0;
+                    self.stat.snapto = 0;
                     break;
 
                 default:
-                    var guessPoint = ~~(self.$scroll[0].scrollLeft + self.view.averageSpacing * self.stat.speed * self.stat.direction * self.prop.speed.influence + .5);
+                    var guessPoint = sourcePoint + self.view.averageSpacing * self.stat.speed * self.stat.direction * self.prop.speed.influence;
                     for (var i = 0; i < self.view.snapPoints.length; i++) {
                         if (self.view.snapPoints[i] > guessPoint) {
                             targetPoint = self.view.snapPoints[self.stat.direction == 1 ? i : i - 1];
                             break;
                         }
                     }
-                    self.stat.currscroll = targetPoint;
+                    self.stat.snapto = Math.min(targetPoint, self.view.maxscroll);
             }
 
             if (self.stat.bounce) {
@@ -391,6 +400,7 @@ var AddSnapSwiper = function(prop, depend) {
         },
         play: function() {
             this.stop();
+            this.playing = true;
             this.interval = setInterval(function(){
                 var frame = self.decay.frames.shift();
                 requestAnimationFrame(function() {
@@ -412,6 +422,7 @@ var AddSnapSwiper = function(prop, depend) {
         },
         stop: function() {
             if (this.interval) clearInterval(this.interval);
+            this.playing = false;
         }
     };
 
